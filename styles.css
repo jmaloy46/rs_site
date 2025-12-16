@@ -1,0 +1,333 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #000;
+    overflow-x: hidden;
+    min-height: 100vh;
+    font-family: 'Georgia', serif;
+}
+
+.background-text-container {
+    position: fixed;
+    top: 0;
+    left: 5%;
+    width: 40%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 5vh;
+}
+
+.background-text {
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.1rem;
+    line-height: 1.9;
+    white-space: pre-wrap;
+    padding: 40px 30px;
+    font-family: 'Courier New', Courier, monospace;
+    max-height: 90vh;
+    overflow-y: auto;
+    pointer-events: auto;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.2) transparent;
+}
+
+.background-text::-webkit-scrollbar {
+    width: 6px;
+}
+
+.background-text::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.background-text::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.2);
+    border-radius: 3px;
+}
+
+.background-text .cursor {
+    display: inline-block;
+    width: 2px;
+    height: 1.2em;
+    background-color: rgba(255, 255, 255, 0.6);
+    margin-left: 2px;
+    vertical-align: text-bottom;
+    animation: blink 0.8s ease-in-out infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+.photo-container {
+    position: fixed;
+    top: 50%;
+    left: 65%;
+    width: min(60vw, 70vh);
+    height: min(60vw, 70vh);
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    border-radius: 50%;
+}
+
+.photo-circle {
+    position: absolute;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    transform-origin: center;
+    /* Use CSS custom properties for positioning */
+    left: var(--base-x);
+    top: var(--base-y);
+    width: var(--circle-size);
+    height: var(--circle-size);
+    /* Transition for smooth hover effect */
+    transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, z-index 0s;
+}
+
+.photo-circle:hover {
+    transform: translate(-50%, -50%) scale(1.8) !important;
+    border-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.5);
+    z-index: 1000 !important;
+}
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    z-index: 1000;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.overlay.active {
+    display: flex;
+}
+
+.enlarged-photo {
+    width: 60vmin;
+    height: 60vmin;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    border: 5px solid rgba(255, 255, 255, 0.8);
+    box-shadow: 0 0 50px rgba(255, 255, 255, 0.3);
+    animation: fadeInScale 0.5s ease-out;
+}
+
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.5);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.photo-container.overlay-active .photo-circle {
+    transition: all 0.5s ease;
+    transform: translate(-50%, -50%) scale(0.7) !important;
+    opacity: 0.3;
+}
+
+.photo-circle.pushed-away {
+    transition: all 0.3s ease;
+    opacity: 0.7;
+}
+
+/* Controls Container */
+.controls-container {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: flex;
+    gap: 10px;
+    z-index: 100;
+}
+
+.controls-container button {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.6);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.controls-container button:hover {
+    background: rgba(255, 255, 255, 0.2);
+    color: rgba(255, 255, 255, 0.9);
+    transform: scale(1.1);
+}
+
+.controls-container button svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Music Toggle */
+.music-toggle .icon-pause {
+    display: none;
+}
+
+.music-toggle.playing .icon-play {
+    display: none;
+}
+
+.music-toggle.playing .icon-pause {
+    display: block;
+}
+
+/* Theme Toggle */
+.theme-toggle .icon-sun {
+    display: none;
+}
+
+.theme-toggle .icon-moon {
+    display: block;
+}
+
+/* Light Mode Styles */
+body.light-mode {
+    background-color: #d4d4d4;
+}
+
+body.light-mode .background-text {
+    color: rgba(0, 0, 0, 0.85);
+}
+
+body.light-mode .background-text .cursor {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+body.light-mode .photo-circle {
+    border-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+body.light-mode .photo-circle:hover {
+    border-color: rgba(0, 0, 0, 0.5);
+    box-shadow: 0 0 40px rgba(0, 0, 0, 0.2);
+}
+
+body.light-mode .controls-container button {
+    background: rgba(0, 0, 0, 0.1);
+    border-color: rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, 0.6);
+}
+
+body.light-mode .controls-container button:hover {
+    background: rgba(0, 0, 0, 0.2);
+    color: rgba(0, 0, 0, 0.9);
+}
+
+body.light-mode .theme-toggle .icon-sun {
+    display: block;
+}
+
+body.light-mode .theme-toggle .icon-moon {
+    display: none;
+}
+
+body.light-mode .overlay {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+body.light-mode .enlarged-photo {
+    border-color: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.2);
+}
+
+body.light-mode .background-text::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 900px) {
+    body {
+        overflow-y: auto;
+        min-height: auto;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .background-text-container {
+        position: relative;
+        width: 100%;
+        height: auto;
+        padding-top: 0;
+        margin-top: 0;
+        order: 2;
+    }
+
+    .background-text {
+        font-size: 0.85rem;
+        line-height: 1.6;
+        padding: 20px;
+        max-height: none;
+        overflow-y: visible;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .photo-container {
+        position: relative;
+        left: auto;
+        top: auto;
+        transform: none;
+        width: 90vw;
+        height: 90vw;
+        max-width: 500px;
+        max-height: 500px;
+        margin: 30px auto;
+        order: 1;
+    }
+
+    .enlarged-photo {
+        width: 80vmin;
+        height: 80vmin;
+    }
+}
+
+@media (max-width: 480px) {
+    .background-text {
+        font-size: 0.8rem;
+        padding: 15px;
+    }
+
+    .photo-container {
+        width: 95vw;
+        height: 95vw;
+        margin: 20px auto;
+    }
+
+    .enlarged-photo {
+        width: 85vmin;
+        height: 85vmin;
+    }
+}
